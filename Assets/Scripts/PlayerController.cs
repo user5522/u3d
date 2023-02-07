@@ -5,15 +5,23 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float speed = 10.0f;
+    public float runSpeed = 20.0f;
     public float jumpForce = 10.0f;
+    public float normalFOV = 60f;
+    public float runningFOV = 75f;
+    public float FOVLerpSpeed = 8f;
 
     private Rigidbody rb;
     private Vector3 movement;
     private bool isGrounded = true;
 
+    public Transform cameraTransform;
+    private Camera mainCamera;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        mainCamera = Camera.main;
     }
 
     void Update()
@@ -21,14 +29,36 @@ public class PlayerController : MonoBehaviour
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
 
-        movement = new Vector3(horizontal, 0.0f, vertical);
-        movement = movement.normalized * speed * Time.deltaTime;
+        Vector3 forward = cameraTransform.forward;
+        forward.y = 0;
+        forward = forward.normalized;
 
-        if (Input.GetButtonDown("Jump") && isGrounded)
+        movement = (forward * vertical + cameraTransform.right * horizontal);
+        if (Input.GetKey(KeyCode.LeftControl))
+        {
+            movement = movement.normalized * runSpeed * Time.deltaTime;
+        }
+        else
+        {
+            movement = movement.normalized * speed * Time.deltaTime;
+        }
+
+        if (Input.GetButton("Jump") && isGrounded)
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isGrounded = false;
         }
+
+        float targetFOV = normalFOV;
+        if (Input.GetKey(KeyCode.LeftControl))
+        {
+            targetFOV = runningFOV;
+        }
+        mainCamera.fieldOfView = Mathf.Lerp(
+            mainCamera.fieldOfView,
+            targetFOV,
+            Time.deltaTime * FOVLerpSpeed
+        );
     }
 
     private void FixedUpdate()
