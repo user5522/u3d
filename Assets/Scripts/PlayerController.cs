@@ -9,8 +9,8 @@ public class PlayerController : MonoBehaviour
     public float jumpForce = 10.0f;
     public float normalFOV = 60f;
     public float runningFOV = 75f;
+    public float zoomFOV = 30f;
     public float FOVLerpSpeed = 8f;
-
     private Rigidbody rb;
     private Vector3 movement;
     private bool isGrounded = true;
@@ -49,10 +49,22 @@ public class PlayerController : MonoBehaviour
             isGrounded = false;
         }
 
+        // FOV shittery
+        // running FOV
         float targetFOV = normalFOV;
         if (Input.GetKey(KeyCode.LeftControl))
         {
             targetFOV = runningFOV;
+        }
+        mainCamera.fieldOfView = Mathf.Lerp(
+            mainCamera.fieldOfView,
+            targetFOV,
+            Time.deltaTime * FOVLerpSpeed
+        );
+        // zooming FOV
+        if (Input.GetKey(KeyCode.C))
+        {
+            targetFOV = zoomFOV;
         }
         mainCamera.fieldOfView = Mathf.Lerp(
             mainCamera.fieldOfView,
