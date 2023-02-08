@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        Application.targetFrameRate = -1;
         rb = GetComponent<Rigidbody>();
         mainCamera = Camera.main;
     }
