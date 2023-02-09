@@ -135,7 +135,7 @@ jobs:
     needs: [build, buildWithMac]
     if: needs.checklicense.outputs.is_unity_license_set == 'true'
     name: Build for ${{ matrix.targetPlatform }}
-    runs-on: windows-latest
+    runs-on: windows-2019
     strategy:
       fail-fast: false
       matrix:
