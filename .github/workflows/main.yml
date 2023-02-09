@@ -46,15 +46,19 @@ jobs:
     name: Test all modes ✨
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/cache@v2
+        with:
+          path: Library
+          key: Library-u3d-Windows
       - uses: actions/checkout@v3
         with:
           lfs: true
       - uses: actions/cache@v3
         with:
           path: Library
-          key: Library-test-project-${{ matrix.targetPlatform }}
+          key: Library-u3d-${{ matrix.targetPlatform }}
           restore-keys: |
-            Library-test-project-
+            Library-u3d-
             Library-
       # https://github.com/game-ci/unity-test-runner/releases/
       - uses: game-ci/unity-test-runner@v2
