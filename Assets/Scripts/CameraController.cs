@@ -4,33 +4,30 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    // Variables
-    public Transform player;
-    public float mouseSensitivity = 2f;
-    float cameraVerticalRotation = 0f;
+    public float sensX;
+    public float sensY;
 
-    void Start()
+    public Transform orientation;
+
+    float xRotation;
+    float yRotation;
+
+    private void Start()
     {
-        // Lock and Hide the Cursor
-        Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
-    void Update()
+    private void Update()
     {
-        // Collect Mouse Input
+        float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensX;
+        float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sensY;
 
-        float inputX = Input.GetAxis("Mouse X") * mouseSensitivity;
-        float inputY = Input.GetAxis("Mouse Y") * mouseSensitivity;
+        yRotation += mouseX;
+        xRotation -= mouseY;
+        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
-        // Rotate the Camera around its local X axis
-
-        cameraVerticalRotation -= inputY;
-        cameraVerticalRotation = Mathf.Clamp(cameraVerticalRotation, -90f, 90f);
-        transform.localEulerAngles = Vector3.right * cameraVerticalRotation;
-
-        // Rotate the Player Object and the Camera around its Y axis
-
-        player.Rotate(Vector3.up * inputX);
+        transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
+        orientation.rotation = Quaternion.Euler(0, yRotation, 0);
     }
 }
