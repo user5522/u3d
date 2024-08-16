@@ -20,8 +20,8 @@ jobs:
       - name: Check whether unity activation requests should be done
         id: checklicense_job
         run: |
-            echo "Skip activation job: ${{ env.UNITY_LICENSE != '' }}"
-            echo "::set-output name=is_unity_license_set::${{ env.UNITY_LICENSE != '' }}"
+          echo "Skip activation job: ${{ env.UNITY_LICENSE != '' }}"
+          echo "::set-output name=is_unity_license_set::${{ env.UNITY_LICENSE != '' }}"
   activation:
     needs: [checklicense]
     if: needs.checklicense.outputs.is_unity_license_set == 'false'
@@ -68,39 +68,8 @@ jobs:
           name: Test results (all modes)
           path: ${{ steps.testRunner.outputs.artifactsPath }}
 
-  build:
-    needs: [checklicense]
-    if: needs.checklicense.outputs.is_unity_license_set == 'true'
-    name: Build for ${{ matrix.targetPlatform }}
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        targetPlatform:
-          - StandaloneLinux64
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          lfs: true
-      - uses: actions/cache@v3
-        with:
-          path: ${{ matrix.projectPath }}/Library
-          key: Library-${{ matrix.projectPath }}-${{ matrix.targetPlatform }}
-          restore-keys: |
-            Library-${{ matrix.projectPath }}-
-            Library-
-      # https://github.com/game-ci/unity-builder/releases/
-      - uses: game-ci/unity-builder@v2
-        with:
-          projectPath: ${{ env.PROJECT_PATH }}
-          targetPlatform: ${{ matrix.targetPlatform }}
-      - uses: actions/upload-artifact@v3
-        with:
-          name: Build-${{ matrix.targetPlatform }}
-          path: build
-
   buildWithWindows:
-    needs: [build]
+    needs: [checklicense]
     if: needs.checklicense.outputs.is_unity_license_set == 'true'
     name: Build for ${{ matrix.targetPlatform }}
     runs-on: windows-2019
