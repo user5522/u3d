@@ -11,7 +11,7 @@ env:
   PROJECT_PATH: .
 
 jobs:
-  buildOnWindows:
+  buildForWindows:
     name: Build for ${{ matrix.targetPlatform }}
     runs-on: ubuntu-latest
     strategy:
