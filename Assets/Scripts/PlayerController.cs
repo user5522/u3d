@@ -1,14 +1,19 @@
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("References")]
+    private Rigidbody rb;
+    public Sliding slidingScript;
+    public CameraController cam;
+
     [Header("Movement")]
     private float movementSpeed;
     public float walkSpeed;
     public float sprintSpeed;
     public float slideSpeed;
+    public float wallrunSpeed;
 
     private float desiredMovementSpeed;
     private float lastDesiredMoveSpeed;
@@ -27,7 +32,7 @@ public class PlayerController : MonoBehaviour
     [Header("Ground")]
     public float playerHeight;
     public LayerMask groundLayer;
-    bool grounded;
+    public bool grounded;
 
     [Header("Slope Handling")]
     public float maxSlopeAngle;
@@ -37,18 +42,21 @@ public class PlayerController : MonoBehaviour
     public Transform orientation;
     private float horizontalInput;
     private float verticalInput;
+
     Vector3 movementDirection;
-    private Rigidbody rb;
-    public MovementState state;
     public enum MovementState
     {
         walking,
         sprinting,
         sliding,
+        wallRunning,
         air,
     }
 
+    public MovementState state;
+
     public bool sliding;
+    public bool wallrunning;
 
     void Start()
     {
@@ -65,13 +73,15 @@ public class PlayerController : MonoBehaviour
         SpeedControl();
         StateHandler();
 
-        if (grounded) rb.drag = groundDrag;
-        else rb.drag = 0f;
+        rb.drag = grounded ? groundDrag : 0f;
     }
 
-    void FixedUpdate()
+    void FixedUpdate() => Move();
+
+    public float GetSlopeAngle()
     {
-        Move();
+        if (OnSlope()) return Vector3.Angle(Vector3.up, slopeHit.normal);
+        return 0f;
     }
 
     private void MovementInput()
@@ -89,18 +99,24 @@ public class PlayerController : MonoBehaviour
 
     private void StateHandler()
     {
-        if (sliding)
+        cam.DoFov(80f);
+        if (wallrunning)
+        {
+            state = MovementState.wallRunning;
+            desiredMovementSpeed = wallrunSpeed;
+        }
+        else if (sliding)
         {
             state = MovementState.sliding;
-            if (OnSlope() && rb.velocity.y > 0.1f)
-            {
-                desiredMovementSpeed = slideSpeed;
-            }
+            float slopeAngle = GetSlopeAngle();
+            if (slopeAngle > 0 && slopeAngle < maxSlopeAngle)
+                desiredMovementSpeed = Mathf.Lerp(walkSpeed, slideSpeed, slopeAngle / maxSlopeAngle);
             else desiredMovementSpeed = sprintSpeed;
         }
         else if (grounded && Input.GetKey(KeyCode.LeftShift))
         {
             state = MovementState.sprinting;
+            cam.DoFov(90f);
             desiredMovementSpeed = sprintSpeed;
         }
         else if (grounded)
@@ -115,10 +131,7 @@ public class PlayerController : MonoBehaviour
             StopAllCoroutines();
             StartCoroutine(SmoothlyLerpMoveSpeed());
         }
-        else
-        {
-            movementSpeed = desiredMovementSpeed;
-        }
+        else movementSpeed = desiredMovementSpeed;
 
         lastDesiredMoveSpeed = desiredMovementSpeed;
     }
@@ -149,15 +162,29 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
-        movementDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
-
-        if (OnSlope() && !exitingSlope)
+        if (sliding)
         {
-            rb.AddForce(GetSlopeMoveDirection(movementDirection) * movementSpeed * 20f, ForceMode.Force);
-            if (rb.velocity.y > 0) rb.AddForce(Vector3.down * 80f, ForceMode.Force);
+            Vector3 slideDir = slidingScript.GetSlideDirection();
+
+            if (OnSlope() && !exitingSlope)
+            {
+                rb.AddForce(GetSlopeMoveDirection(slideDir) * movementSpeed * 20f, ForceMode.Force);
+                if (rb.velocity.y > 0) rb.AddForce(Vector3.down * 80f, ForceMode.Force);
+            }
+            else rb.AddForce(10f * movementSpeed * slideDir, ForceMode.Force);
         }
-        else if (grounded) rb.AddForce(movementDirection * movementSpeed * 10f, ForceMode.Force);
-        else if (!grounded) rb.AddForce(movementDirection * movementSpeed * 10f * airMultiplier, ForceMode.Force);
+        else
+        {
+            movementDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
+
+            if (OnSlope() && !exitingSlope)
+            {
+                rb.AddForce(40f * movementSpeed * GetSlopeMoveDirection(movementDirection), ForceMode.Force);
+                if (rb.velocity.y > 0) rb.AddForce(Vector3.down * 80f, ForceMode.Force);
+            }
+            else if (grounded) rb.AddForce(10f * movementSpeed * movementDirection, ForceMode.Force);
+            else if (!grounded) rb.AddForce(10f * airMultiplier * movementSpeed * movementDirection, ForceMode.Force);
+        }
 
         // turn off gravity when on slope to avoid sliding off the slope
         rb.useGravity = !OnSlope();
@@ -203,8 +230,5 @@ public class PlayerController : MonoBehaviour
         return false;
     }
 
-    public Vector3 GetSlopeMoveDirection(Vector3 direction)
-    {
-        return Vector3.ProjectOnPlane(direction, slopeHit.normal);
-    }
+    public Vector3 GetSlopeMoveDirection(Vector3 direction) => Vector3.ProjectOnPlane(direction, slopeHit.normal);
 }
