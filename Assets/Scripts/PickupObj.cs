@@ -53,9 +53,7 @@ public class PickupObj : MonoBehaviour
         heldObjectRb.isKinematic = false;
         Vector3 forceDirection = cam.transform.forward;
         if (Physics.Raycast(cam.transform.position, cam.forward, out RaycastHit hit, 500f))
-        {
             forceDirection = (hit.point - holdPoint.position).normalized;
-        }
 
         heldObjectRb.AddForce(forceDirection * throwForce, ForceMode.Impulse);
         heldObject.transform.SetParent(null);
