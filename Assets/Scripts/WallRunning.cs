@@ -36,10 +36,7 @@ public class WallRunning : MonoBehaviour
     public float exitWallTime;
     private float exitWallTimer;
 
-    private void Start()
-    {
-        rb = GetComponent<Rigidbody>();
-    }
+    private void Start() => rb = GetComponent<Rigidbody>();
 
     private void Update()
     {
@@ -49,8 +46,7 @@ public class WallRunning : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (playerController.wallrunning)
-            WallRunningMovement();
+        if (playerController.wallrunning) WallRunningMovement();
     }
 
     private void CheckForWall()
@@ -59,10 +55,7 @@ public class WallRunning : MonoBehaviour
         wallLeft = Physics.Raycast(transform.position, -orientation.right, out leftWallhit, wallCheckDistance, wallLayer);
     }
 
-    private bool AboveGround()
-    {
-        return !Physics.Raycast(transform.position, Vector3.down, minJumpHeight, groundLayer);
-    }
+    private bool AboveGround() => !Physics.Raycast(transform.position, Vector3.down, minJumpHeight, groundLayer);
 
     private void StateMachine()
     {
