@@ -29,7 +29,6 @@ public class Sliding : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         startYscale = playerObject.localScale.y;
         playerController.sliding = false;
-        cameraTransform = Camera.main.transform;
         cam.DoTilt(0f);
     }
 
