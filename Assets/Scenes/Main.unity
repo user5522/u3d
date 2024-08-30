@@ -397,7 +397,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   agent: {fileID: 129819713}
-  playerObj: {fileID: 0}
+  playerObj: {fileID: 364299367}
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -568,6 +568,7 @@ MonoBehaviour:
   withdrawDelay: 10
   weaponAnimator: {fileID: 3428411158920959721}
   chainAttackWindow: 1
+  drewWeapon: 0
 --- !u!114 &139114139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -587,6 +588,8 @@ MonoBehaviour:
   sprintingEffectIntensityX: 1.02
   sprintingEffectSpeed: 12
   playerController: {fileID: 1767844105}
+  followerInstance: {fileID: 139114140}
+  weaponController: {fileID: 139114138}
 --- !u!114 &139114140
 MonoBehaviour:
   m_ObjectHideFlags: 0
