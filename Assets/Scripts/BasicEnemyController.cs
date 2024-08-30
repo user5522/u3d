@@ -1,13 +1,13 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyController : MonoBehaviour
+[RequireComponent(typeof(EnemyHealth))]
+[RequireComponent(typeof(HighlightInSlowMode))]
+public class BasicEnemyController : MonoBehaviour
 {
     public NavMeshAgent agent;
-    public Transform playerObj;
+    public Transform player;
     public LayerMask groundLayer, playerLayer;
-
-    public float health;
 
     public Vector3 walkPoint;
     bool walkPointSet;
@@ -17,19 +17,13 @@ public class EnemyController : MonoBehaviour
     public float timeBetweenAttacks;
     bool alreadyAttacked;
 
-    public Material defaultMaterial;
-    public Material slowMotionMaterial;
-    private Renderer enemyRenderer;
-
     public float sightRange, attackRange;
     public bool playerInSightRange, playerInAttackRange;
 
     private void Awake()
     {
-        playerObj = GameObject.Find("PlayerObj").transform;
+        player = GameObject.Find("PlayerObj").transform;
         agent = GetComponent<NavMeshAgent>();
-        enemyRenderer = GetComponent<Renderer>();
-        defaultMaterial = enemyRenderer.material;
     }
 
     void Update()
@@ -40,9 +34,6 @@ public class EnemyController : MonoBehaviour
         if (!playerInSightRange && !playerInAttackRange) Patroling();
         if (playerInSightRange && !playerInAttackRange) ChasePlayer();
         if (playerInSightRange && playerInAttackRange) AttackPlayer();
-
-        if (Time.timeScale < 1) enemyRenderer.material = slowMotionMaterial;
-        else enemyRenderer.material = defaultMaterial;
     }
 
     private void Patroling()
@@ -65,12 +56,12 @@ public class EnemyController : MonoBehaviour
         if (Physics.Raycast(walkPoint, -transform.up, 2f, groundLayer)) walkPointSet = true;
     }
 
-    private void ChasePlayer() => agent.SetDestination(playerObj.position);
+    private void ChasePlayer() => agent.SetDestination(player.position);
 
     private void AttackPlayer()
     {
         agent.SetDestination(transform.position);
-        transform.LookAt(playerObj);
+        transform.LookAt(player);
 
         if (!alreadyAttacked)
         {
@@ -82,13 +73,12 @@ public class EnemyController : MonoBehaviour
 
     private void ResetAttack() => alreadyAttacked = false;
 
-
-    public void TakeDamage(int damage)
+    void OnDrawGizmosSelected()
     {
-        health -= damage;
-        if (health <= 0) DestroyEnemy();
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, sightRange);
+
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, attackRange);
     }
-
-    private void DestroyEnemy() => Destroy(gameObject);
-
 }

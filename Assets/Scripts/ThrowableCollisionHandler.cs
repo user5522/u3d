@@ -6,7 +6,7 @@ public class ThrowableCollisionHandler : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Enemy"))
         {
-            other.gameObject.GetComponent<EnemyController>().TakeDamage(10);
+            other.gameObject.GetComponent<EnemyHealth>().TakeDamage(10);
             Destroy(gameObject);
         }
     }
