@@ -580,12 +580,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b485bab2fdbb744c8b3384463a2b8fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkingEffectIntensity: 0.02
-  walkingEffectIntensityX: 1
-  walkingEffectSpeed: 7
-  sprintingEffectIntensity: 0.04
-  sprintingEffectIntensityX: 1.02
-  sprintingEffectSpeed: 12
+  walkingEffectIntensity: 0.04
+  walkingEffectIntensityX: 2
+  walkingEffectSpeed: 5
+  sprintingEffectIntensity: 0.12
+  sprintingEffectIntensityX: 2
+  sprintingEffectSpeed: 10
   playerController: {fileID: 1767844105}
 --- !u!114 &139114140
 MonoBehaviour:
@@ -599,7 +599,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4ec3fb31ac4e4f4ba23da286ac379b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetTransform: {fileID: 87152849}
+  targetTransform: {fileID: 852771282}
   offset: {x: 0, y: 0, z: 0}
   smoothTime: 0.3
 --- !u!1 &186773828
@@ -2778,6 +2778,7 @@ GameObject:
   - component: {fileID: 852771280}
   - component: {fileID: 852771283}
   - component: {fileID: 852771284}
+  - component: {fileID: 852771285}
   m_Layer: 0
   m_Name: PlayerCam
   m_TagString: MainCamera
@@ -2929,6 +2930,25 @@ MonoBehaviour:
   m_BeforeTransparentBundles: []
   m_BeforeStackBundles: []
   m_AfterStackBundles: []
+--- !u!114 &852771285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 852771279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a47d5ce4ca2a0842b8e4faeb6a0efac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerController: {fileID: 1767844105}
+  cameraHolder: {fileID: 87152849}
+  rb: {fileID: 1767844103}
+  walkAmplitude: 0.05
+  walkFrequency: 12
+  sprintAmplitude: 0.1
+  sprintFrequency: 21
 --- !u!1 &924598916
 GameObject:
   m_ObjectHideFlags: 0
