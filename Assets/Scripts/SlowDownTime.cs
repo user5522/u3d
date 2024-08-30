@@ -13,6 +13,8 @@ public class SlowDownTime : MonoBehaviour
     private float availableSlowdownTime;
     private float lastRechargeTime;
 
+    void Start() => availableSlowdownTime = maxSlowdownTime;
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Tab)) ToggleSlowMotion();
