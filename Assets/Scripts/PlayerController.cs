@@ -116,8 +116,8 @@ public class PlayerController : MonoBehaviour
         else if (grounded && Input.GetKey(KeyCode.LeftShift))
         {
             state = MovementState.sprinting;
-            cam.DoFov(90f);
             desiredMovementSpeed = sprintSpeed;
+            if (rb.velocity.magnitude != 0) cam.DoFov(90f);
         }
         else if (grounded)
         {
