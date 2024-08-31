@@ -29,7 +29,7 @@ public class ShooterEnemyController : MonoBehaviour
     void Update()
     {
         CheckPlayerInRange();
-        if (isPlayerInRange)
+        if (isPlayerInRange && player.activeSelf)
         {
             gameObject.transform.LookAt(playerTransform);
             if (canShoot) StartCoroutine(ShootBurst());
