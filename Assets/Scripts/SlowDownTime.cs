@@ -9,7 +9,7 @@ public class SlowDownTime : MonoBehaviour
     public Image bar;
     public Material slowMotionMaterial;
 
-    private bool isSlowMotion = false;
+    public bool isSlowMotion = false;
     private float availableSlowdownTime;
     private float lastRechargeTime;
 

@@ -13,6 +13,7 @@ public class ShooterEnemyController : MonoBehaviour
     public int attackDamage;
     public GameObject projectilePrefab;
     public GameObject player;
+    public Transform firePoint;
 
     private Transform playerTransform;
     private PlayerBehaviour playerBehaviour;
@@ -49,19 +50,19 @@ public class ShooterEnemyController : MonoBehaviour
             ShootProjectile();
             yield return new WaitForSeconds(timeBetweenShots);
         }
-
         yield return new WaitForSeconds(burstCooldown);
         canShoot = true;
     }
 
     void ShootProjectile()
     {
-        GameObject projectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
-        Vector3 direction = (playerTransform.position - transform.position).normalized;
-        if (projectile.TryGetComponent<Rigidbody>(out var rb)) rb.velocity = direction * projectileSpeed;
+        GameObject projectile = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
+        Vector3 direction = (playerTransform.position - firePoint.position).normalized;
+        if (projectile.TryGetComponent<Rigidbody>(out var rb))
+            rb.velocity = direction * projectileSpeed;
 
-        // idk why but sometimes it doesn't have the script
-        if (!projectile.TryGetComponent<Projectile>(out var projectileScript)) projectileScript = projectile.AddComponent<Projectile>();
+        if (!projectile.TryGetComponent<Projectile>(out var projectileScript))
+            projectileScript = projectile.AddComponent<Projectile>();
 
         projectileScript.damage = attackDamage;
         projectileScript.playerBehaviour = playerBehaviour;
@@ -71,6 +72,9 @@ public class ShooterEnemyController : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, detectionRadius);
+
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(firePoint.position, 0.1f);
+        Gizmos.DrawLine(firePoint.position, firePoint.position + firePoint.forward);
     }
 }
-

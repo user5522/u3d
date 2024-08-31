@@ -4,16 +4,15 @@ using UnityEngine;
 public class WeaponController : MonoBehaviour
 {
     public GameObject weapon;
-    public float attackCooldown;
     public float withdrawDelay;
     public Animator weaponAnimator;
     public float chainAttackWindow;
+    public WeaponHitbox weaponHitbox;
 
     private bool drewWeapon = false;
-    private bool canAttack = false;
+    private bool canAttack = true;
     private Coroutine withdrawCoroutine;
     private Coroutine chainAttackCoroutine;
-    private Coroutine cooldownCoroutine;
     private bool canChainAttack = false;
     private int currentAttackIndex = 0;
 
@@ -36,15 +35,9 @@ public class WeaponController : MonoBehaviour
 
     private void PerformAttack()
     {
-        if (canAttack)
+        if (canAttack || canChainAttack)
         {
-            currentAttackIndex = 1;
-            canAttack = false;
-            ExecuteAttack();
-        }
-        else if (canChainAttack)
-        {
-            currentAttackIndex++;
+            currentAttackIndex = (currentAttackIndex % 3) + 1;
             ExecuteAttack();
         }
     }
@@ -63,17 +56,33 @@ public class WeaponController : MonoBehaviour
                 weaponAnimator.SetTrigger("Attack3");
                 break;
         }
+        weaponHitbox.StartDeflectionWindow();
         ResetWithdrawTimer();
-        canChainAttack = currentAttackIndex < 3;
+
         if (chainAttackCoroutine != null) StopCoroutine(chainAttackCoroutine);
         chainAttackCoroutine = StartCoroutine(HandleAttackChain());
+    }
+
+    public void OnSuccessfulDeflection()
+    {
+        StartCoroutine(HitStop());
+    }
+
+    IEnumerator HitStop()
+    {
+        Time.timeScale = 0.1f;
+        float normalSpeed = weaponAnimator.speed;
+        weaponAnimator.speed = 0f;
+        yield return new WaitForSeconds(.01f);
+        weaponAnimator.speed = normalSpeed;
+        Time.timeScale = 1f;
     }
 
     private void WithdrawWeapon()
     {
         weaponAnimator.SetTrigger("Withdraw");
         drewWeapon = false;
-        canAttack = false;
+        canAttack = true;
         canChainAttack = false;
         currentAttackIndex = 0;
     }
@@ -82,12 +91,6 @@ public class WeaponController : MonoBehaviour
     {
         if (withdrawCoroutine != null) StopCoroutine(withdrawCoroutine);
         withdrawCoroutine = StartCoroutine(WithdrawAfterDelay());
-    }
-
-    private void StartCooldown()
-    {
-        if (cooldownCoroutine != null) StopCoroutine(cooldownCoroutine);
-        cooldownCoroutine = StartCoroutine(AttackCooldown());
     }
 
     IEnumerator WithdrawAfterDelay()
@@ -99,17 +102,9 @@ public class WeaponController : MonoBehaviour
     IEnumerator HandleAttackChain()
     {
         canChainAttack = true;
+        canAttack = false;
         yield return new WaitForSeconds(chainAttackWindow);
         canChainAttack = false;
-        if (currentAttackIndex == 3 || !canChainAttack) StartCooldown();
-    }
-
-    IEnumerator AttackCooldown()
-    {
-        canAttack = false;
-        canChainAttack = false;
-        yield return new WaitForSeconds(attackCooldown);
         canAttack = true;
-        currentAttackIndex = 0;
     }
 }

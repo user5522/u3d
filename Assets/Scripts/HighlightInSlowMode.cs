@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 public class HighlightInSlowMode : MonoBehaviour
@@ -6,18 +7,21 @@ public class HighlightInSlowMode : MonoBehaviour
     private Material slowModeMaterial;
     private Material defaultMaterial;
     private Renderer objRenderer;
+    private SlowDownTime sdt;
 
     void Awake()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
-        slowModeMaterial = player.GetComponent<SlowDownTime>().slowMotionMaterial;
+        // this sucks ass
+        player = GameObject.FindGameObjectsWithTag("Player").SkipWhile(e => e.name != "Player").First();
+        sdt = player.GetComponent<SlowDownTime>();
+        slowModeMaterial = sdt.slowMotionMaterial;
         objRenderer = GetComponent<Renderer>();
         defaultMaterial = objRenderer.material;
     }
 
     void Update()
     {
-        if (Time.timeScale < 1) objRenderer.material = slowModeMaterial;
+        if (sdt.isSlowMotion) objRenderer.material = slowModeMaterial;
         else objRenderer.material = defaultMaterial;
     }
 }

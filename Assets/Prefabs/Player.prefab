@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2243451591734837183}
   m_Layer: 3
   m_Name: CameraPos
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -187,10 +187,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slowdownFactor: 0.4
-  maxSlowdownTime: 5
-  rechargeRate: 0.5
+  maxSlowdownTime: 7.5
+  rechargeRate: 0.75
   bar: {fileID: 0}
   slowMotionMaterial: {fileID: 2100000, guid: e9b9f1aca412023479a266fd1694c1d8, type: 2}
+  isSlowMotion: 0
 --- !u!114 &2243451591745325126
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -232,7 +233,7 @@ GameObject:
   - component: {fileID: 2243451592634283872}
   m_Layer: 3
   m_Name: Orientation
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -266,7 +267,7 @@ GameObject:
   - component: {fileID: 2243451592876107043}
   m_Layer: 3
   m_Name: PlayerObj
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
