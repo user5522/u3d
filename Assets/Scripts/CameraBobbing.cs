@@ -18,10 +18,7 @@ public class CameraBobbing : MonoBehaviour
     private Vector3 startPos;
     private Vector3 bobOffset;
 
-    void Start()
-    {
-        startPos = transform.localPosition;
-    }
+    void Start() => startPos = transform.localPosition;
 
     void Update()
     {
@@ -41,14 +38,8 @@ public class CameraBobbing : MonoBehaviour
                 break;
         }
 
-        if (playerController.grounded && playerController.state != PlayerController.MovementState.sliding)
-        {
-            CheckMotion();
-        }
-        else
-        {
-            ResetBob();
-        }
+        if (playerController.grounded && playerController.state != PlayerController.MovementState.sliding) CheckMotion();
+        else ResetBob();
 
         ApplyBob();
     }
@@ -73,13 +64,7 @@ public class CameraBobbing : MonoBehaviour
         bobOffset = FootstepMotion();
     }
 
-    private void ApplyBob()
-    {
-        transform.localPosition = startPos + bobOffset;
-    }
+    private void ApplyBob() => transform.localPosition = startPos + bobOffset;
 
-    private void ResetBob()
-    {
-        bobOffset = Vector3.Lerp(bobOffset, Vector3.zero, 5f * Time.deltaTime);
-    }
+    private void ResetBob() => bobOffset = Vector3.Lerp(bobOffset, Vector3.zero, 5f * Time.deltaTime);
 }
