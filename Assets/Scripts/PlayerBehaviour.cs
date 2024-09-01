@@ -8,16 +8,16 @@ public class PlayerBehaviour : MonoBehaviour
 
     public void PlayerTakeDmg(int dmgAmount)
     {
-        GameManager.gameManager.playerHealth.DmgUnit(dmgAmount);
-        healthBar.SetHealth(GameManager.gameManager.playerHealth.Health);
+        GameManager.Instance.playerHealth.DmgUnit(dmgAmount);
+        healthBar.SetHealth(GameManager.Instance.playerHealth.Health);
 
-        if (GameManager.gameManager.playerHealth.Health <= 0)
+        if (GameManager.Instance.playerHealth.Health <= 0)
             gameOverScreen.gameObject.SetActive(true);
 
     }
     public void PlayerHeal(int healing)
     {
-        GameManager.gameManager.playerHealth.HealUnit(healing);
-        healthBar.SetHealth(GameManager.gameManager.playerHealth.Health);
+        GameManager.Instance.playerHealth.HealUnit(healing);
+        healthBar.SetHealth(GameManager.Instance.playerHealth.Health);
     }
 }
