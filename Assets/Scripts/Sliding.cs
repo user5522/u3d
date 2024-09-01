@@ -122,8 +122,6 @@ public class Sliding : MonoBehaviour
         return true;
     }
 
-    private void RestorePlayerHeight()
-    {
+    private void RestorePlayerHeight() =>
         playerObject.localScale = new Vector3(playerObject.localScale.x, startYscale, playerObject.localScale.z);
-    }
 }
