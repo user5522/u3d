@@ -70,12 +70,13 @@ public class WeaponController : MonoBehaviour
 
     IEnumerator HitStop()
     {
+        float previousTimeScale = Time.timeScale;
         Time.timeScale = 0.1f;
         float normalSpeed = weaponAnimator.speed;
         weaponAnimator.speed = 0f;
         yield return new WaitForSeconds(.01f);
         weaponAnimator.speed = normalSpeed;
-        Time.timeScale = 1f;
+        Time.timeScale = previousTimeScale;
     }
 
     private void WithdrawWeapon()
