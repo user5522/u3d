@@ -43,7 +43,9 @@ public class PlayerController : MonoBehaviour
     private float horizontalInput;
     private float verticalInput;
 
-    Vector3 movementDirection;
+    private Vector3 movementDirection;
+
+    [HideInInspector]
     public enum MovementState
     {
         walking,
@@ -53,10 +55,10 @@ public class PlayerController : MonoBehaviour
         air,
     }
 
-    public MovementState state;
+    [HideInInspector] public MovementState state;
 
-    public bool sliding;
-    public bool wallrunning;
+    [HideInInspector] public bool sliding;
+    [HideInInspector] public bool wallrunning;
 
     void Start()
     {
