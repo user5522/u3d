@@ -5,8 +5,8 @@ public class PlayerController : MonoBehaviour
 {
     [Header("References")]
     private Rigidbody rb;
-    public Sliding slidingScript;
     public CameraController cam;
+    private Sliding slidingScript;
 
     [Header("Movement")]
     private float movementSpeed;
@@ -63,6 +63,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        slidingScript = GetComponent<Sliding>();
         rb.freezeRotation = true;
 
         readyToJump = true;

@@ -5,7 +5,7 @@ public class WallRunning : MonoBehaviour
     [Header("References")]
     public Transform orientation;
     public CameraController cam;
-    public PlayerController playerController;
+    private PlayerController playerController;
     private Rigidbody rb;
 
     [Header("Wallrunning")]
@@ -36,7 +36,11 @@ public class WallRunning : MonoBehaviour
     public float exitWallTime;
     private float exitWallTimer;
 
-    private void Start() => rb = GetComponent<Rigidbody>();
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+        playerController = GetComponent<PlayerController>();
+    }
 
     private void Update()
     {

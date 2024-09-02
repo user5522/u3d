@@ -5,9 +5,9 @@ public class Sliding : MonoBehaviour
     [Header("References")]
     public Transform orientation;
     public Transform playerObject;
-    public Transform cameraTransform;
     public CameraController cam;
-    public PlayerController playerController;
+    private Transform cameraTransform;
+    private PlayerController playerController;
     private Rigidbody rb;
 
     [Header("Sliding")]
@@ -27,8 +27,10 @@ public class Sliding : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        playerController = GetComponent<PlayerController>();
         startYscale = playerObject.localScale.y;
         playerController.sliding = false;
+        cameraTransform = cam.transform;
         cam.DoTilt(0f);
     }
 

@@ -20,11 +20,7 @@ public class BasicEnemyController : MonoBehaviour
     public float sightRange, attackRange;
     public bool playerInSightRange, playerInAttackRange;
 
-    private void Awake()
-    {
-        player = GameObject.Find("PlayerObj").transform;
-        agent = GetComponent<NavMeshAgent>();
-    }
+    private void Awake() => agent = GetComponent<NavMeshAgent>();
 
     void Update()
     {
