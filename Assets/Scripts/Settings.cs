@@ -4,10 +4,11 @@ using UnityEngine.UI;
 
 public class Settings : MonoBehaviour
 {
+    [Header("General UI")]
     public Toggle vSyncToggle;
     public Slider maxFPSSlider;
     public TMP_Text maxFPSText;
-    public Dropdown resolutionDropdown;
+    public TMP_Dropdown resolutionDropdown;
     public FullScreenMode fullScreenMode = FullScreenMode.FullScreenWindow;
     public GameObject SettingsPanel;
 
@@ -40,7 +41,7 @@ public class Settings : MonoBehaviour
         for (int i = 0; i < maxResolutions; i++)
         {
             Resolution resolution = resolutions[i];
-            Dropdown.OptionData option = new Dropdown.OptionData(
+            TMP_Dropdown.OptionData option = new TMP_Dropdown.OptionData(
                 string.Format("{0}x{1}", resolution.width, resolution.height)
             );
             resolutionDropdown.options.Add(option);
@@ -60,7 +61,7 @@ public class Settings : MonoBehaviour
         float maxFPS = PlayerPrefs.GetFloat("MaxFPS", 60f);
         maxFPSSlider.value = maxFPS;
         Application.targetFrameRate = (int)maxFPS;
-        maxFPSText.text = "FPS Limiter - " + maxFPS.ToString();
+        maxFPSText.text = "Max Framerate - " + maxFPS.ToString();
 
         int resolutionIndex = PlayerPrefs.GetInt("ResolutionIndex", 0);
         SetResolution(resolutionIndex);
