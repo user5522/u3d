@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -23,7 +24,9 @@ public class WeaponController : MonoBehaviour
             if (!drewWeapon) DrawWeapon();
             else if (drewWeapon && (canAttack || canChainAttack)) PerformAttack();
         }
+        else if (Input.GetMouseButtonUp(0)) StopAttackAnimation();
     }
+
 
     private void DrawWeapon()
     {
@@ -63,10 +66,14 @@ public class WeaponController : MonoBehaviour
         chainAttackCoroutine = StartCoroutine(HandleAttackChain());
     }
 
-    public void OnSuccessfulDeflection()
+    private void StopAttackAnimation()
     {
-        StartCoroutine(HitStop());
+        if (currentAttackIndex != 0)
+            weaponAnimator.ResetTrigger("Attack" + currentAttackIndex);
+        canAttack = true;
     }
+
+    public void OnSuccessfulDeflection() => StartCoroutine(HitStop());
 
     IEnumerator HitStop()
     {
