@@ -13,7 +13,11 @@ public class SettingsManager : MonoBehaviour
         else Instance = this;
     }
 
-    private void Start() => LoadSettings();
+    private void Start()
+    {
+        LoadSettings();
+        UpdateCursorVisibility();
+    }
 
     private void Update() => UpdateCursorVisibility();
 
