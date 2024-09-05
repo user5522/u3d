@@ -59,4 +59,6 @@ public class PickupObj : MonoBehaviour
         heldObject.transform.SetParent(null);
         heldObject = null;
     }
+
+    public bool IsPickingUpObject() => heldObject != null;
 }

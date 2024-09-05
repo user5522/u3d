@@ -115,4 +115,6 @@ public class WeaponController : MonoBehaviour
         canChainAttack = false;
         canAttack = true;
     }
+
+    public bool IsWeaponDrawn() => drewWeapon;
 }
