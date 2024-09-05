@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class SettingsManager : MonoBehaviour
 {
@@ -23,6 +22,10 @@ public class SettingsManager : MonoBehaviour
 
     private void LoadSettings()
     {
+        // Quality
+        int qualityIndex = PlayerPrefs.GetInt("QualityIndex", 3);
+        QualitySettings.SetQualityLevel(qualityIndex);
+
         // VSync
         bool vSyncOn = PlayerPrefs.GetInt("VSync", 1) == 1;
         QualitySettings.vSyncCount = vSyncOn ? 1 : 0;

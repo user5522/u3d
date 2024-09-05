@@ -8,6 +8,7 @@ public class Settings : MonoBehaviour
     public Toggle vSyncToggle;
     public Slider maxFPSSlider;
     public TMP_Text maxFPSText;
+    public TMP_Dropdown qualityDropdown;
     public TMP_Dropdown resolutionDropdown;
     public FullScreenMode fullScreenMode = FullScreenMode.FullScreenWindow;
     public GameObject SettingsPanel;
@@ -18,8 +19,10 @@ public class Settings : MonoBehaviour
 
         vSyncToggle.onValueChanged.AddListener(ToggleVSync);
         maxFPSSlider.onValueChanged.AddListener(SetMaxFPS);
+        qualityDropdown.onValueChanged.AddListener(SetQuality);
         resolutionDropdown.onValueChanged.AddListener(SetResolution);
 
+        SetupQualityDropdown();
         SetupResolutionDropdown();
     }
 
@@ -52,6 +55,13 @@ public class Settings : MonoBehaviour
         resolutionDropdown.RefreshShownValue();
     }
 
+    private void SetupQualityDropdown()
+    {
+        int savedQualityIndex = PlayerPrefs.GetInt("QualityIndex", 3);
+        qualityDropdown.value = savedQualityIndex;
+        qualityDropdown.RefreshShownValue();
+    }
+
     private void LoadSettings()
     {
         bool vSyncOn = PlayerPrefs.GetInt("VSync", 1) == 1;
@@ -65,6 +75,9 @@ public class Settings : MonoBehaviour
 
         int resolutionIndex = PlayerPrefs.GetInt("ResolutionIndex", 0);
         SetResolution(resolutionIndex);
+
+        int qualityIndex = PlayerPrefs.GetInt("QualityIndex", 3);
+        SetQuality(qualityIndex);
     }
 
     private void ToggleVSync(bool isOn)
@@ -87,6 +100,13 @@ public class Settings : MonoBehaviour
         Resolution[] resolutions = Screen.resolutions;
         Screen.SetResolution(resolutions[index].width, resolutions[index].height, fullScreenMode);
         PlayerPrefs.SetInt("ResolutionIndex", index);
+        PlayerPrefs.Save();
+    }
+
+    private void SetQuality(int index)
+    {
+        QualitySettings.SetQualityLevel(index);
+        PlayerPrefs.SetInt("QualityIndex", index);
         PlayerPrefs.Save();
     }
 }
