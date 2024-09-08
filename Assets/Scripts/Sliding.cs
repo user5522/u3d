@@ -16,9 +16,11 @@ public class Sliding : MonoBehaviour
     public float rotationSpeed;
 
     [Header("Ground Slam")]
+    public GameObject blastPrefab;
     public float groundSlamForce;
     public float shakeDuration;
     public float shakeIntensity;
+    public float blastRadius = 5f;
 
     private float startYscale;
     private Vector3 slideDirection;
@@ -43,9 +45,7 @@ public class Sliding : MonoBehaviour
         }
 
         if ((Input.GetKeyUp(KeyCode.LeftControl) && playerController.sliding)
-
-            || (!playerController.grounded && playerController.sliding))
-            StopSlide();
+            || (!playerController.grounded && playerController.sliding)) StopSlide();
         if (CanRestorePlayerHeight() && !playerController.sliding) RestorePlayerHeight();
 
         if (playerController.sliding) HandleSlidingMovement();
@@ -53,6 +53,7 @@ public class Sliding : MonoBehaviour
         if (isGroundSlamming && playerController.grounded)
         {
             cam.DoShake(shakeDuration, shakeIntensity);
+            SpawnBlast();
             isGroundSlamming = false;
         }
     }
@@ -78,6 +79,18 @@ public class Sliding : MonoBehaviour
         isGroundSlamming = true;
     }
 
+    private void SpawnBlast()
+    {
+        GameObject blastObject = Instantiate(blastPrefab, transform.position, Quaternion.identity);
+
+        if (blastObject.TryGetComponent<Blast>(out var blast))
+        {
+            blast.maxRadius = blastRadius;
+            blast.speed = .5f;
+            blast.blastForce = groundSlamForce;
+        }
+    }
+
     private void HandleSlidingMovement()
     {
         float horizontalInput = Input.GetAxisRaw("Horizontal");
@@ -98,9 +111,9 @@ public class Sliding : MonoBehaviour
     private void SlidingMovement()
     {
         Vector3 forceToApply;
-        if (playerController.OnSlope())
-            forceToApply = playerController.GetSlopeMoveDirection(slideDirection) * slideForce;
+        if (playerController.OnSlope()) forceToApply = playerController.GetSlopeMoveDirection(slideDirection) * slideForce;
         else forceToApply = slideDirection * slideForce;
+
         rb.AddForce(forceToApply, ForceMode.Force);
         playerObject.forward = Vector3.Slerp(playerObject.forward, slideDirection, Time.deltaTime * 10f);
     }
@@ -118,12 +131,11 @@ public class Sliding : MonoBehaviour
         Vector3 playerCenter = transform.position + (Vector3.up * (playerObject.localScale.y / 2f));
         float playerHalfNormalHeight = startYscale / 2f;
 
-        RaycastHit hit;
-        if (Physics.Raycast(playerCenter, Vector3.up, out hit, playerHalfNormalHeight + 0.1f, playerController.groundLayer))
+        if (Physics.Raycast(playerCenter, Vector3.up, out RaycastHit hit, playerHalfNormalHeight + 0.1f, playerController.groundLayer))
             return hit.distance >= startYscale;
+
         return true;
     }
 
-    private void RestorePlayerHeight() =>
-        playerObject.localScale = new Vector3(playerObject.localScale.x, startYscale, playerObject.localScale.z);
+    private void RestorePlayerHeight() => playerObject.localScale = new Vector3(playerObject.localScale.x, startYscale, playerObject.localScale.z);
 }

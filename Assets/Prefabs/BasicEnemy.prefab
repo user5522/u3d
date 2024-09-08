@@ -15,6 +15,10 @@ GameObject:
   - component: {fileID: 5624618021356392161}
   - component: {fileID: 5624618021356392160}
   - component: {fileID: 5624618021356392169}
+  - component: {fileID: 7190414835926678604}
+  - component: {fileID: 6296776006770892297}
+  - component: {fileID: 7675101942776953993}
+  - component: {fileID: 3479255712880044547}
   m_Layer: 10
   m_Name: BasicEnemy
   m_TagString: Enemy
@@ -147,8 +151,6 @@ MonoBehaviour:
   playerBehaviour: {fileID: 0}
   attackDamage: 10
   timeBetweenAttacks: 1
-  defaultMaterial: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
-  slowMotionMaterial: {fileID: 2100000, guid: e9b9f1aca412023479a266fd1694c1d8, type: 2}
   sightRange: 20
   attackRange: 1
   playerInSightRange: 0
@@ -166,3 +168,59 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 10
+--- !u!114 &7190414835926678604
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5624618021356392095}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e99aeb51475d4744aef1a65ffa0eeb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!54 &6296776006770892297
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5624618021356392095}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
+--- !u!114 &7675101942776953993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5624618021356392095}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8241bf709a634454d8c669de37013737, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  knockbackThreshold: 0.05
+  recoveryDelay: 0.5
+--- !u!114 &3479255712880044547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5624618021356392095}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8241bf709a634454d8c669de37013737, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  knockbackThreshold: 0.05
+  recoveryDelay: 0.5

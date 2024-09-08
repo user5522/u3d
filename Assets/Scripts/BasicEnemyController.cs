@@ -52,7 +52,10 @@ public class BasicEnemyController : MonoBehaviour
         if (Physics.Raycast(walkPoint, -transform.up, 2f, groundLayer)) walkPointSet = true;
     }
 
-    private void ChasePlayer() => agent.SetDestination(player.position);
+    private void ChasePlayer()
+    {
+        if (agent.enabled) agent.SetDestination(player.position);
+    }
 
     private void AttackPlayer()
     {
