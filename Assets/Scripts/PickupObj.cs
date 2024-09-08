@@ -10,6 +10,9 @@ public class PickupObj : MonoBehaviour
     private GameObject heldObject;
     private Rigidbody heldObjectRb;
 
+    private Collider heldObjectCollider;
+    private Collider heldObjectTriggerCollider;
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.F))
@@ -22,11 +25,15 @@ public class PickupObj : MonoBehaviour
 
     private void TryPickupObject()
     {
-        RaycastHit hit;
-        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, pickupRange))
+        RaycastHit[] hits = Physics.SphereCastAll(cam.transform.position, 0.5f, cam.transform.forward, pickupRange);
+        foreach (RaycastHit hit in hits)
         {
             GameObject objectHit = hit.collider.gameObject;
-            if (objectHit.CompareTag("Throwable")) PickupObject(objectHit);
+            if (objectHit.CompareTag("Throwable"))
+            {
+                PickupObject(objectHit);
+                break;
+            }
         }
     }
 
@@ -35,23 +42,27 @@ public class PickupObj : MonoBehaviour
         heldObject = obj;
         heldObjectRb = heldObject.GetComponent<Rigidbody>();
         heldObjectRb.isKinematic = true;
+
         heldObject.transform.SetParent(holdPoint);
         heldObject.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+
+        heldObjectCollider = heldObject.GetComponent<Collider>();
+        heldObjectCollider.enabled = false;
+
+        heldObjectTriggerCollider = heldObject.GetComponent<SphereCollider>();
+        heldObjectTriggerCollider.enabled = false;
     }
 
-    private void MoveHeldObject()
-    {
-        heldObject.transform.SetPositionAndRotation(holdPoint.position, holdPoint.rotation);
-        // i couldn't figure another way to fix the throwable's collider fighting 
-        // with the player's collider so i just disable it when it's picked up
-        heldObject.GetComponent<BoxCollider>().enabled = false;
-    }
+    private void MoveHeldObject() => heldObject.transform.SetPositionAndRotation(holdPoint.position, holdPoint.rotation);
 
     private void ThrowObject()
     {
-        heldObject.GetComponent<BoxCollider>().enabled = true;
+        heldObjectCollider.enabled = true;
+        heldObjectTriggerCollider.enabled = true;
+
         heldObjectRb.isKinematic = false;
         Vector3 forceDirection = cam.transform.forward;
+
         if (Physics.Raycast(cam.transform.position, cam.forward, out RaycastHit hit, 500f))
             forceDirection = (hit.point - holdPoint.position).normalized;
 

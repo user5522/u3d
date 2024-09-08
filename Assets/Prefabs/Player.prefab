@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 2243451591745325121}
   - component: {fileID: 2243451591745325120}
   - component: {fileID: 2243451591745325127}
-  - component: {fileID: 2243451591745325126}
+  - component: {fileID: 836636221274443307}
   - component: {fileID: 2243451591745325125}
   m_Layer: 3
   m_Name: Player
@@ -100,7 +100,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a87bc1290b617948a366ec0f4acb94e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slidingScript: {fileID: 2243451591745325121}
   cam: {fileID: 0}
   walkSpeed: 7
   sprintSpeed: 12
@@ -136,15 +135,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   orientation: {fileID: 2243451592634283872}
   playerObject: {fileID: 2243451592876107052}
-  cameraTransform: {fileID: 0}
   cam: {fileID: 0}
-  playerController: {fileID: 2243451591745325122}
   slideForce: 20
   slideYscale: 0.5
   rotationSpeed: 0.2
+  blastPrefab: {fileID: 8645659478751323567, guid: d7d32f5b5f2560d4db3a2292d002b9de, type: 3}
   groundSlamForce: 20
   shakeDuration: 1
   shakeIntensity: 0.25
+  blastRadius: 5
 --- !u!114 &2243451591745325120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -159,7 +158,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   orientation: {fileID: 2243451592634283872}
   cam: {fileID: 0}
-  playerController: {fileID: 2243451591745325122}
   wallLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -192,7 +190,7 @@ MonoBehaviour:
   bar: {fileID: 0}
   slowMotionMaterial: {fileID: 2100000, guid: e9b9f1aca412023479a266fd1694c1d8, type: 2}
   isSlowMotion: 0
---- !u!114 &2243451591745325126
+--- !u!114 &836636221274443307
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
