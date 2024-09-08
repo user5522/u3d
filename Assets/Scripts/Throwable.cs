@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ThrowableCollisionHandler : MonoBehaviour
+public class Throwable : MonoBehaviour
 {
     private void OnCollisionEnter(Collision other)
     {
