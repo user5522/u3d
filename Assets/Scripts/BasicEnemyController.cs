@@ -35,7 +35,7 @@ public class BasicEnemyController : MonoBehaviour
     private void Patroling()
     {
         if (!walkPointSet) SearchWalkPoint();
-        if (walkPointSet) agent.SetDestination(walkPoint);
+        if (agent.enabled && walkPointSet) agent.SetDestination(walkPoint);
 
         Vector3 distanceToWalkPoint = transform.position - walkPoint;
 
@@ -59,7 +59,7 @@ public class BasicEnemyController : MonoBehaviour
 
     private void AttackPlayer()
     {
-        agent.SetDestination(transform.position);
+        if (agent.enabled) agent.SetDestination(transform.position);
         transform.LookAt(player);
 
         if (!alreadyAttacked)
