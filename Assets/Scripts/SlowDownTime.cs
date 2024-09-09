@@ -9,22 +9,26 @@ public class SlowDownTime : MonoBehaviour
     public Image bar;
     public Material slowMotionMaterial;
 
-    public bool isSlowMotion = false;
+    [HideInInspector] public bool isSlowMotion = false;
+
     private float availableSlowdownTime;
     private float lastRechargeTime;
+    private float previousTimeScale;
+
 
     void Start() => availableSlowdownTime = maxSlowdownTime;
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Tab)) ToggleSlowMotion();
-        if (isSlowMotion)
+        if (Input.GetKeyDown(KeyCode.Tab) && !Pause.isPaused) ToggleSlowMotion();
+        if (isSlowMotion && !Pause.isPaused)
         {
-            availableSlowdownTime -= Time.unscaledDeltaTime;
+            availableSlowdownTime -= Time.deltaTime;
             if (availableSlowdownTime <= 0) ToggleSlowMotion();
         }
-        else RechargeSlowdownTime();
+        else if (!Pause.isPaused) RechargeSlowdownTime();
         UpdateUI();
+        HandleGamePaused();
     }
 
     void RechargeSlowdownTime()
@@ -50,6 +54,11 @@ public class SlowDownTime : MonoBehaviour
             lastRechargeTime = Time.time;
             slowMotionMaterial.SetFloat("_SlowMotionIntensity", 0);
         }
+    }
+
+    void HandleGamePaused()
+    {
+        if (Pause.isPaused && isSlowMotion) Time.timeScale = 0f;
     }
 
     void UpdateUI() => bar.fillAmount = availableSlowdownTime / maxSlowdownTime;

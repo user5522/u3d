@@ -1,39 +1,32 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System;
 
 public class Settings : MonoBehaviour
 {
     [Header("General UI")]
     public Toggle vSyncToggle;
+    public Toggle fullScreenToggle;
     public Slider maxFPSSlider;
     public TMP_Text maxFPSText;
     public TMP_Dropdown qualityDropdown;
     public TMP_Dropdown resolutionDropdown;
-    public FullScreenMode fullScreenMode = FullScreenMode.FullScreenWindow;
-    public GameObject SettingsPanel;
+
+    private FullScreenMode fullScreenMode = FullScreenMode.FullScreenWindow;
 
     private void Awake()
     {
         LoadSettings();
 
         vSyncToggle.onValueChanged.AddListener(ToggleVSync);
+        fullScreenToggle.onValueChanged.AddListener(ToggleFullScreen);
         maxFPSSlider.onValueChanged.AddListener(SetMaxFPS);
         qualityDropdown.onValueChanged.AddListener(SetQuality);
         resolutionDropdown.onValueChanged.AddListener(SetResolution);
 
         SetupQualityDropdown();
         SetupResolutionDropdown();
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            SettingsManager sm = SettingsManager.Instance;
-            sm.SetPauseState(!sm.GetPauseState());
-            SettingsPanel.SetActive(sm.GetPauseState());
-        }
     }
 
     private void SetupResolutionDropdown()
@@ -68,6 +61,10 @@ public class Settings : MonoBehaviour
         vSyncToggle.isOn = vSyncOn;
         QualitySettings.vSyncCount = vSyncOn ? 1 : 0;
 
+        bool fullscreen = PlayerPrefs.GetString("Fullscreen", "FullScreenWindow") == "FullScreenWindow";
+        fullScreenToggle.isOn = fullscreen;
+        Screen.SetResolution(Screen.width, Screen.height, fullscreen ? FullScreenMode.FullScreenWindow : FullScreenMode.Windowed);
+
         float maxFPS = PlayerPrefs.GetFloat("MaxFPS", 60f);
         maxFPSSlider.value = maxFPS;
         Application.targetFrameRate = (int)maxFPS;
@@ -78,6 +75,14 @@ public class Settings : MonoBehaviour
 
         int qualityIndex = PlayerPrefs.GetInt("QualityIndex", 3);
         SetQuality(qualityIndex);
+    }
+
+    private void ToggleFullScreen(bool isOn)
+    {
+        fullScreenMode = isOn ? FullScreenMode.FullScreenWindow : FullScreenMode.Windowed;
+        Screen.SetResolution(Screen.width, Screen.height, fullScreenMode);
+        PlayerPrefs.SetString("Fullscreen", isOn ? "FullScreenWindow" : "Windowed");
+        PlayerPrefs.Save();
     }
 
     private void ToggleVSync(bool isOn)

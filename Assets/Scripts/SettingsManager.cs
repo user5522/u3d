@@ -4,8 +4,6 @@ public class SettingsManager : MonoBehaviour
 {
     public static SettingsManager Instance { get; private set; }
 
-    private static bool IsPaused = false;
-
     void Awake()
     {
         if (Instance != null && Instance != this) Destroy(this);
@@ -30,6 +28,10 @@ public class SettingsManager : MonoBehaviour
         bool vSyncOn = PlayerPrefs.GetInt("VSync", 1) == 1;
         QualitySettings.vSyncCount = vSyncOn ? 1 : 0;
 
+        // Fullscreen
+        bool fullscreen = PlayerPrefs.GetString("Fullscreen", "FullScreenWindow") == "FullScreenWindow";
+        Screen.SetResolution(Screen.width, Screen.height, fullscreen ? FullScreenMode.FullScreenWindow : FullScreenMode.Windowed);
+
         // Max FPS
         float maxFPS = PlayerPrefs.GetFloat("MaxFPS", 60f);
         Application.targetFrameRate = (int)maxFPS;
@@ -46,10 +48,7 @@ public class SettingsManager : MonoBehaviour
 
     private void UpdateCursorVisibility()
     {
-        Cursor.visible = IsPaused;
-        Cursor.lockState = IsPaused ? CursorLockMode.None : CursorLockMode.Locked;
+        Cursor.visible = Pause.isPaused;
+        Cursor.lockState = Pause.isPaused ? CursorLockMode.None : CursorLockMode.Locked;
     }
-
-    public void SetPauseState(bool paused) => IsPaused = paused;
-    public bool GetPauseState() => IsPaused;
 }
