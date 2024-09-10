@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.AI;
 
 [RequireComponent(typeof(LineRenderer))]
 public class Blast : MonoBehaviour
@@ -38,29 +37,26 @@ public class Blast : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (isExpanding)
+        if (!isExpanding) return;
+
+        if (radius <= maxRadius)
         {
-            if (radius <= maxRadius)
-            {
-                ApplyForce();
-                SetPositions();
-                radius += speed;
-                lr.widthMultiplier = (maxRadius - radius) / maxRadius;
-            }
-            else
-            {
-                isExpanding = false;
-                Destroy(gameObject);
-            }
+            ApplyForce();
+            SetPositions();
+            radius += speed;
+            lr.widthMultiplier = (maxRadius - radius) / maxRadius;
+        }
+        else
+        {
+            isExpanding = false;
+            Destroy(gameObject);
         }
     }
 
     void SetPositions()
     {
         for (int i = 0; i < pointCount; i++)
-        {
             lr.SetPosition(i, positions[i] * radius);
-        }
     }
 
     void ApplyForce()
@@ -72,14 +68,8 @@ public class Blast : MonoBehaviour
             Vector3 direction = (c.transform.position - transform.position).normalized;
             Vector3 force = direction * blastForce;
 
-            if (c.TryGetComponent(out KnockbackHandler knockbackHandler))
-            {
-                knockbackHandler.ApplyKnockback(force);
-            }
-            else if (c.TryGetComponent(out Rigidbody colRb))
-            {
-                colRb.AddForce(force, ForceMode.Impulse);
-            }
+            if (c.TryGetComponent(out KnockbackHandler knockbackHandler)) knockbackHandler.ApplyKnockback(force);
+            else if (c.TryGetComponent(out Rigidbody colRb)) colRb.AddForce(force, ForceMode.Impulse);
         }
     }
 
