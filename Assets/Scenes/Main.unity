@@ -2320,9 +2320,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Back
-
-'
+  m_text: Resume
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c9e8882d80f0ab64f87b7f2dd997f8b3, type: 2}
   m_sharedMaterial: {fileID: -1314896432748127591, guid: c9e8882d80f0ab64f87b7f2dd997f8b3, type: 2}
@@ -3860,7 +3858,7 @@ GameObject:
   - component: {fileID: 776662515}
   - component: {fileID: 776662514}
   m_Layer: 5
-  m_Name: Back
+  m_Name: Resume
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
