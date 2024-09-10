@@ -18,6 +18,8 @@ public class WeaponController : MonoBehaviour
 
     void Update()
     {
+        if (Pause.isPaused) return;
+
         if (Input.GetMouseButtonDown(0))
         {
             if (!drewWeapon) DrawWeapon();
