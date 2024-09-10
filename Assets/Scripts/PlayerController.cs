@@ -55,7 +55,7 @@ public class PlayerController : MonoBehaviour
         air,
     }
 
-    [HideInInspector] public MovementState state;
+    public MovementState state;
 
     [HideInInspector] public bool sliding;
     [HideInInspector] public bool wallrunning;
@@ -116,7 +116,7 @@ public class PlayerController : MonoBehaviour
                 desiredMovementSpeed = Mathf.Lerp(walkSpeed, slideSpeed, slopeAngle / maxSlopeAngle);
             else desiredMovementSpeed = sprintSpeed;
         }
-        else if (grounded && Input.GetKey(KeyCode.LeftShift))
+        else if (grounded && Input.GetKey(KeyCode.LeftShift) && (verticalInput != 0 || horizontalInput != 0))
         {
             state = MovementState.sprinting;
             desiredMovementSpeed = sprintSpeed;
