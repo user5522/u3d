@@ -7,14 +7,14 @@ public class GameManager : MonoBehaviour
 
     public UnitHealth playerHealth = new UnitHealth(100, 100);
 
+    bool waiting;
+    float previousTimescale;
+
     void Awake()
     {
         if (Instance != null && Instance != this) Destroy(this);
         else Instance = this;
     }
-
-    bool waiting;
-    float previousTimescale;
 
     public void HitStop(float duration)
     {
