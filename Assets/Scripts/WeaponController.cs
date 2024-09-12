@@ -74,18 +74,7 @@ public class WeaponController : MonoBehaviour
         canAttack = true;
     }
 
-    public void OnSuccessfulDeflection() => StartCoroutine(HitStop());
-
-    IEnumerator HitStop()
-    {
-        float previousTimeScale = Time.timeScale;
-        Time.timeScale = 0.1f;
-        float normalSpeed = weaponAnimator.speed;
-        weaponAnimator.speed = 0f;
-        yield return new WaitForSeconds(.01f);
-        weaponAnimator.speed = normalSpeed;
-        Time.timeScale = previousTimeScale;
-    }
+    public void OnSuccessfulDeflection() => GameManager.Instance.HitStop(0.2f);
 
     private void WithdrawWeapon()
     {
