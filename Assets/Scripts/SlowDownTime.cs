@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 public class SlowDownTime : MonoBehaviour
 {
@@ -8,22 +10,32 @@ public class SlowDownTime : MonoBehaviour
     public float rechargeRate;
     public Image bar;
     public Material slowMotionMaterial;
+    public Volume postProcessVolume;
+    public float chromaticAberrationIntensity = 1f;
+    public float dimmingIntensity = -0.5f;
 
     [HideInInspector] public bool isSlowMotion = false;
 
     private float availableSlowdownTime;
     private float lastRechargeTime;
-    private float previousTimeScale;
+    private ChromaticAberration chromaticAberration;
+    private ColorAdjustments colorAdjustments;
 
-
-    void Start() => availableSlowdownTime = maxSlowdownTime;
+    void Start()
+    {
+        availableSlowdownTime = maxSlowdownTime;
+        if (postProcessVolume.profile.TryGet(out ChromaticAberration chromaticAberrationEffect))
+            chromaticAberration = chromaticAberrationEffect;
+        if (postProcessVolume.profile.TryGet(out ColorAdjustments colorAdjustmentsEffect))
+            colorAdjustments = colorAdjustmentsEffect;
+    }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Tab) && !Pause.isPaused) ToggleSlowMotion();
         if (isSlowMotion && !Pause.isPaused)
         {
-            availableSlowdownTime -= Time.deltaTime;
+            availableSlowdownTime -= Time.unscaledDeltaTime;
             if (availableSlowdownTime <= 0) ToggleSlowMotion();
         }
         else if (!Pause.isPaused) RechargeSlowdownTime();
@@ -46,6 +58,8 @@ public class SlowDownTime : MonoBehaviour
             isSlowMotion = true;
             Time.timeScale = slowdownFactor;
             slowMotionMaterial.SetFloat("_SlowMotionIntensity", 1);
+            SetChromaticAberration(true);
+            SetDimming(true);
         }
         else if (isSlowMotion)
         {
@@ -53,6 +67,30 @@ public class SlowDownTime : MonoBehaviour
             Time.timeScale = 1f;
             lastRechargeTime = Time.time;
             slowMotionMaterial.SetFloat("_SlowMotionIntensity", 0);
+            SetChromaticAberration(false);
+            SetDimming(false);
+        }
+    }
+
+    void SetChromaticAberration(bool enabled)
+    {
+        if (enabled) chromaticAberration.intensity.Override(chromaticAberrationIntensity);
+        chromaticAberration.active = enabled;
+    }
+
+    void SetDimming(bool enabled)
+    {
+        colorAdjustments.active = enabled;
+
+        if (enabled)
+        {
+            colorAdjustments.postExposure.Override(dimmingIntensity);
+            Shader.SetGlobalFloat("_GlobalDimmingIntensity", -dimmingIntensity);
+        }
+        else
+        {
+            colorAdjustments.postExposure.Override(0f);
+            Shader.SetGlobalFloat("_GlobalDimmingIntensity", 0f);
         }
     }
 

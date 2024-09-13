@@ -189,6 +189,8 @@ MonoBehaviour:
   rechargeRate: 0.75
   bar: {fileID: 0}
   slowMotionMaterial: {fileID: 2100000, guid: e9b9f1aca412023479a266fd1694c1d8, type: 2}
+  postProcessVolume: {fileID: 0}
+  chromaticAberrationIntensity: 0.5
   isSlowMotion: 0
 --- !u!114 &836636221274443307
 MonoBehaviour:
