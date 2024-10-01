@@ -76,7 +76,7 @@ public class PlayerController : MonoBehaviour
         SpeedControl();
         StateHandler();
 
-        rb.drag = grounded ? groundDrag : 0f;
+        rb.linearDamping = grounded ? groundDrag : 0f;
     }
 
     void FixedUpdate() => Move();
@@ -120,7 +120,7 @@ public class PlayerController : MonoBehaviour
         {
             state = MovementState.sprinting;
             desiredMovementSpeed = sprintSpeed;
-            if (rb.velocity.magnitude != 0) cam.DoFov(90f);
+            if (rb.linearVelocity.magnitude != 0) cam.DoFov(90f);
         }
         else if (grounded)
         {
@@ -172,7 +172,7 @@ public class PlayerController : MonoBehaviour
             if (OnSlope() && !exitingSlope)
             {
                 rb.AddForce(GetSlopeMoveDirection(slideDir) * movementSpeed * 20f, ForceMode.Force);
-                if (rb.velocity.y > 0) rb.AddForce(Vector3.down * 80f, ForceMode.Force);
+                if (rb.linearVelocity.y > 0) rb.AddForce(Vector3.down * 80f, ForceMode.Force);
             }
             else rb.AddForce(10f * movementSpeed * slideDir, ForceMode.Force);
         }
@@ -183,7 +183,7 @@ public class PlayerController : MonoBehaviour
             if (OnSlope() && !exitingSlope)
             {
                 rb.AddForce(40f * movementSpeed * GetSlopeMoveDirection(movementDirection), ForceMode.Force);
-                if (rb.velocity.y > 0) rb.AddForce(Vector3.down * 80f, ForceMode.Force);
+                if (rb.linearVelocity.y > 0) rb.AddForce(Vector3.down * 80f, ForceMode.Force);
             }
             else if (grounded) rb.AddForce(10f * movementSpeed * movementDirection, ForceMode.Force);
             else if (!grounded) rb.AddForce(10f * airMultiplier * movementSpeed * movementDirection, ForceMode.Force);
@@ -197,15 +197,15 @@ public class PlayerController : MonoBehaviour
     {
         if (OnSlope() && !exitingSlope)
         {
-            if (rb.velocity.magnitude > movementSpeed) rb.velocity = rb.velocity.normalized * movementSpeed;
+            if (rb.linearVelocity.magnitude > movementSpeed) rb.linearVelocity = rb.linearVelocity.normalized * movementSpeed;
         }
         else
         {
-            Vector3 flatVelocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+            Vector3 flatVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
             if (flatVelocity.magnitude > movementSpeed)
             {
                 Vector3 limitedVelocity = flatVelocity.normalized * movementSpeed;
-                rb.velocity = new Vector3(limitedVelocity.x, rb.velocity.y, limitedVelocity.z);
+                rb.linearVelocity = new Vector3(limitedVelocity.x, rb.linearVelocity.y, limitedVelocity.z);
             }
         }
     }
@@ -213,7 +213,7 @@ public class PlayerController : MonoBehaviour
     private void Jump()
     {
         exitingSlope = true;
-        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
     }
 

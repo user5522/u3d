@@ -54,7 +54,7 @@ public class CameraBobbing : MonoBehaviour
 
     private void CheckMotion()
     {
-        Vector3 velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+        Vector3 velocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
         float speed = velocity.magnitude;
         if (speed < 0.1f)
         {

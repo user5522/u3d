@@ -48,7 +48,7 @@ public class Projectile : MonoBehaviour
         if (!isDeflected)
         {
             isDeflected = true;
-            rb.velocity = deflectionDirection * deflectionSpeed;
+            rb.linearVelocity = deflectionDirection * deflectionSpeed;
             transform.forward = deflectionDirection;
         }
     }

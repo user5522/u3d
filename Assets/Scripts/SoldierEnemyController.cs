@@ -108,7 +108,7 @@ public class SoldierEnemyController : MonoBehaviour
         Vector3 direction = (player.position - firePoint.position).normalized;
 
         if (projectile.TryGetComponent<Rigidbody>(out var rb))
-            rb.velocity = direction * projectileSpeed;
+            rb.linearVelocity = direction * projectileSpeed;
 
         if (!projectile.TryGetComponent<Projectile>(out var projectileScript))
             projectileScript = projectile.AddComponent<Projectile>();

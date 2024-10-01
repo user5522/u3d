@@ -39,13 +39,13 @@ public class KnockbackHandler : MonoBehaviour
 
     private void StartRecovery()
     {
-        rb.velocity = Vector3.zero;
+        rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
     }
 
     private void CheckKnockbackEnd()
     {
-        if (rb.velocity.magnitude <= knockbackThreshold) EndKnockback();
+        if (rb.linearVelocity.magnitude <= knockbackThreshold) EndKnockback();
     }
 
     private void EndKnockback()

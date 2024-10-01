@@ -69,12 +69,12 @@ public class Sliding : MonoBehaviour
         playerObject.localScale = new Vector3(playerObject.localScale.x, slideYscale, playerObject.localScale.z);
         rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
         slideDirection = orientation.forward;
-        if (rb.velocity.y >= 0) slideDirection.y = 0;
+        if (rb.linearVelocity.y >= 0) slideDirection.y = 0;
     }
 
     private void GroundSlam()
     {
-        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
         rb.AddForce(Vector3.down * groundSlamForce, ForceMode.Impulse);
         isGroundSlamming = true;
     }

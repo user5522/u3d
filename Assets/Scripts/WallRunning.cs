@@ -97,7 +97,7 @@ public class WallRunning : MonoBehaviour
 
         wallRunTimer = maxWallRunTime;
 
-        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
 
         cam.DoFov(90f);
         if (wallLeft) cam.DoTilt(-10f);
@@ -115,7 +115,7 @@ public class WallRunning : MonoBehaviour
         rb.AddForce(wallForward * wallRunForce, ForceMode.Force);
 
         if (upwardsRunning)
-            rb.velocity = new Vector3(rb.velocity.x, wallClimbSpeed, rb.velocity.z);
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, wallClimbSpeed, rb.linearVelocity.z);
 
         if (!(wallLeft && horizontalInput > 0) && !(wallRight && horizontalInput < 0))
             rb.AddForce(-wallNormal * 100, ForceMode.Force);
@@ -138,7 +138,7 @@ public class WallRunning : MonoBehaviour
 
         Vector3 forceToApply = transform.up * wallJumpUpForce + wallNormal * wallJumpSideForce;
 
-        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
         rb.AddForce(forceToApply, ForceMode.Impulse);
     }
 }
