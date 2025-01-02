@@ -12,6 +12,7 @@ public class GameOverScreen : MonoBehaviour
 
     void Start()
     {
+        GameManager.Instance.isGameOver = true;
         player.SetActive(false);
         StartCoroutine(FlashText());
         Time.timeScale = 1;
@@ -21,6 +22,7 @@ public class GameOverScreen : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
+            GameManager.Instance.isGameOver = false;
             gameObject.SetActive(false);
             player.SetActive(true);
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);

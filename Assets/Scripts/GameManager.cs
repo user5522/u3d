@@ -7,6 +7,9 @@ public class GameManager : MonoBehaviour
 
     public UnitHealth playerHealth = new UnitHealth(100, 100);
 
+    public bool isGameOver;
+    public bool isPaused;
+
     bool waiting;
     float previousTimescale;
 

@@ -48,7 +48,7 @@ public class SettingsManager : MonoBehaviour
 
     private void UpdateCursorVisibility()
     {
-        Cursor.visible = Pause.isPaused;
-        Cursor.lockState = Pause.isPaused ? CursorLockMode.None : CursorLockMode.Locked;
+        Cursor.visible = GameManager.Instance.isPaused;
+        Cursor.lockState = GameManager.Instance.isPaused ? CursorLockMode.None : CursorLockMode.Locked;
     }
 }

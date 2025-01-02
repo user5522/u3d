@@ -18,7 +18,7 @@ public class WeaponController : MonoBehaviour
 
     void Update()
     {
-        if (Pause.isPaused) return;
+        if (GameManager.Instance.isPaused) return;
 
         if (Input.GetMouseButtonDown(0))
         {

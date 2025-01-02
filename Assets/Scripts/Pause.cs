@@ -6,8 +6,6 @@ public class Pause : MonoBehaviour
 
     private float previousTimeScale;
 
-    public static bool isPaused = false;
-
     void Start() => previousTimeScale = Time.timeScale;
 
     void Update()
@@ -17,22 +15,22 @@ public class Pause : MonoBehaviour
 
     public void TogglePause()
     {
-        if (Time.timeScale > 0)
+        if (Time.timeScale > 0 && !GameManager.Instance.isGameOver)
         {
             previousTimeScale = Time.timeScale;
             Time.timeScale = 0;
             AudioListener.pause = true; // for audio whenever that gets added
             pauseMenu.SetActive(true);
 
-            isPaused = true;
+            GameManager.Instance.isPaused = true;
         }
-        else if (Time.timeScale == 0)
+        else if (Time.timeScale == 0 && !GameManager.Instance.isGameOver)
         {
             Time.timeScale = previousTimeScale;
             AudioListener.pause = false; // for audio whenever that gets added
             pauseMenu.SetActive(false);
 
-            isPaused = false;
+            GameManager.Instance.isPaused = false;
         }
     }
 

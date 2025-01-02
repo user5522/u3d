@@ -32,13 +32,13 @@ public class SlowDownTime : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Tab) && !Pause.isPaused) ToggleSlowMotion();
-        if (isSlowMotion && !Pause.isPaused)
+        if (Input.GetKeyDown(KeyCode.Tab) && !GameManager.Instance.isPaused) ToggleSlowMotion();
+        if (isSlowMotion && !GameManager.Instance.isPaused)
         {
             availableSlowdownTime -= Time.unscaledDeltaTime;
             if (availableSlowdownTime <= 0) ToggleSlowMotion();
         }
-        else if (!Pause.isPaused) RechargeSlowdownTime();
+        else if (!GameManager.Instance.isPaused) RechargeSlowdownTime();
         UpdateUI();
         HandleGamePaused();
     }
@@ -96,7 +96,7 @@ public class SlowDownTime : MonoBehaviour
 
     void HandleGamePaused()
     {
-        if (Pause.isPaused && isSlowMotion) Time.timeScale = 0f;
+        if (GameManager.Instance.isPaused && isSlowMotion) Time.timeScale = 0f;
     }
 
     void UpdateUI() => bar.fillAmount = availableSlowdownTime / maxSlowdownTime;
