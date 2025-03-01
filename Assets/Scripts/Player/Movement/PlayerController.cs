@@ -51,7 +51,8 @@ public class PlayerController : MonoBehaviour
         walking,
         sprinting,
         sliding,
-        wallRunning,
+        wallRunningUp,
+        wallRunningDown,
         air,
     }
 
@@ -81,12 +82,6 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate() => Move();
 
-    public float GetSlopeAngle()
-    {
-        if (OnSlope()) return Vector3.Angle(Vector3.up, slopeHit.normal);
-        return 0f;
-    }
-
     private void MovementInput()
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
@@ -103,10 +98,19 @@ public class PlayerController : MonoBehaviour
     private void StateHandler()
     {
         cam.DoFov(80f);
+
         if (wallrunning)
         {
-            state = MovementState.wallRunning;
-            desiredMovementSpeed = wallrunSpeed;
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                state = MovementState.wallRunningUp;
+                desiredMovementSpeed = wallrunSpeed;
+            }
+            else
+            {
+                state = MovementState.wallRunningDown;
+                desiredMovementSpeed = wallrunSpeed;
+            }
         }
         else if (sliding)
         {
@@ -127,7 +131,11 @@ public class PlayerController : MonoBehaviour
             state = MovementState.walking;
             desiredMovementSpeed = walkSpeed;
         }
-        else state = MovementState.air;
+        else
+        {
+            state = MovementState.air;
+            desiredMovementSpeed = airMultiplier * walkSpeed;
+        }
 
         if (Mathf.Abs(desiredMovementSpeed - lastDesiredMoveSpeed) > 8 && movementSpeed != 0)
         {
@@ -234,4 +242,10 @@ public class PlayerController : MonoBehaviour
     }
 
     public Vector3 GetSlopeMoveDirection(Vector3 direction) => Vector3.ProjectOnPlane(direction, slopeHit.normal);
+
+    public float GetSlopeAngle()
+    {
+        if (OnSlope()) return Vector3.Angle(Vector3.up, slopeHit.normal);
+        return 0f;
+    }
 }

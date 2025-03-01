@@ -44,7 +44,8 @@ public class ViewBobbing : MonoBehaviour
                 effectIntensityX = sprintingEffectIntensityX;
                 effectSpeed = sprintingEffectSpeed;
                 break;
-            case PlayerController.MovementState.wallRunning:
+            case PlayerController.MovementState.wallRunningUp:
+            case PlayerController.MovementState.wallRunningDown:
                 effectIntensity = sprintingEffectIntensity;
                 effectIntensityX = sprintingEffectIntensityX;
                 effectSpeed = sprintingEffectSpeed;

@@ -57,6 +57,7 @@ public class SlowDownTime : MonoBehaviour
         {
             isSlowMotion = true;
             Time.timeScale = slowdownFactor;
+            AudioManager.Instance.SetPitch(AudioManager.Instance.slowMotionPitch);
             slowMotionMaterial.SetFloat("_SlowMotionIntensity", 1);
             SetChromaticAberration(true);
             SetDimming(true);
@@ -65,6 +66,7 @@ public class SlowDownTime : MonoBehaviour
         {
             isSlowMotion = false;
             Time.timeScale = 1f;
+            AudioManager.Instance.SetPitch(AudioManager.Instance.normalPitch);
             lastRechargeTime = Time.time;
             slowMotionMaterial.SetFloat("_SlowMotionIntensity", 0);
             SetChromaticAberration(false);
