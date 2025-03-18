@@ -1,4 +1,4 @@
-Shader "Custom/SlowMotionURPDimmingResistant"
+Shader "Custom/SlowMotion"
 {
     Properties
     {
