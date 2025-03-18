@@ -37,7 +37,7 @@ public class Settings : MonoBehaviour
         for (int i = 0; i < maxResolutions; i++)
         {
             Resolution resolution = resolutions[i];
-            TMP_Dropdown.OptionData option = new TMP_Dropdown.OptionData(
+            TMP_Dropdown.OptionData option = new(
                 string.Format("{0}x{1}", resolution.width, resolution.height)
             );
             resolutionDropdown.options.Add(option);
@@ -103,7 +103,7 @@ public class Settings : MonoBehaviour
     private void SetResolution(int index)
     {
         Resolution[] resolutions = Screen.resolutions;
-        Screen.SetResolution(resolutions[index].width, resolutions[index].height, fullScreenMode);
+        Screen.SetResolution(resolutions[index - 1].width, resolutions[index - 1].height, fullScreenMode);
         PlayerPrefs.SetInt("ResolutionIndex", index);
         PlayerPrefs.Save();
     }
